@@ -43,7 +43,6 @@ namespace Morsel
             this.textBox1.Text = MidiListener.MIDI_NOTE_ID.ToString();
             this.trackBar2.Value = (int)MidiListener.DASH_THRESHOLD_MS;
             this.label3.Text = MidiListener.DASH_THRESHOLD_MS.ToString() + " (ms)";
-            setNote("meow");
         }
 
         private void trackBar2_Scroll(object sender, EventArgs e)
