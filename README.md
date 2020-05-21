@@ -4,4 +4,4 @@ This winforms application lets you type characters via morse code sent through M
 
 
 
-![Screenshot](morsel.png)
+![Screenshot](Morsel.png)
