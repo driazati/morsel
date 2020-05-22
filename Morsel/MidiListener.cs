@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Midi;
 using System.Threading;
+using System.Security.Cryptography;
 
 namespace Morsel
 {
@@ -25,7 +26,7 @@ namespace Morsel
     {
         public static bool isPressed;
         public static UInt64 timer = 0;
-        public static UInt64 DASH_THRESHOLD_MS = 75;
+        public static UInt64 DOT_LENGTH_MS = 75;
         public static UInt64 MIDI_NOTE_ID = 64;
         public static Form1 form;
         static Dictionary<string, string> code = new Dictionary<string, string>() {
@@ -65,6 +66,18 @@ namespace Morsel
             { ".-", "a" },
             { "...", "s" },
             { ".----", "1" },
+            { ".-.-.-", "." },
+            { "--..--", "," },
+            { "..--..", "?" },
+            { "-.-.--", "!" },
+            { ".----.", "'" },
+            { "-....-", "-" },
+            { "-..-.", "/" },
+            { ".--.-.", "@" },
+            { "-.--.", "(" },
+            { "-.--.-", ")" },
+            { "---...", ":" },
+            { "-.-.-.", ";" },
         };
 
 
@@ -78,6 +91,7 @@ namespace Morsel
             UInt64 msPressed = 0;
             UInt64 msUnpressed = 0;
             string buffer = "";
+            string wordbuffer = "";
 
             while (true)
             {
@@ -97,13 +111,20 @@ namespace Morsel
                 {
                     if (!isPressed)
                     {
-                        if (msPressed < DASH_THRESHOLD_MS)
+                        if (msPressed < DOT_LENGTH_MS)
                         {
                             buffer += ".";
                         }
-                        else
+                        else if (msPressed >= DOT_LENGTH_MS && msPressed < DOT_LENGTH_MS * 5)
                         {
                             buffer += "-";
+                        } else
+                        {
+                            // backspace
+                            buffer = "";
+                            wordbuffer = "";
+                            SendKeys.SendWait("{BACKSPACE}");
+                            Console.WriteLine("Backspace");
                         }
                     }
 
@@ -111,20 +132,30 @@ namespace Morsel
                     msUnpressed = 0;
                 }
 
-                if (msUnpressed >= DASH_THRESHOLD_MS * 2 && buffer != "")
+                if (msUnpressed >= DOT_LENGTH_MS && buffer != "")
                 {
                     Console.WriteLine("Writing " + buffer);
                     if (code.ContainsKey(buffer))
                     {
-                        Console.WriteLine(code[buffer]);
-                        SendKeys.SendWait(code[buffer]);
-                        form.addChar(code[buffer]);
+                        var theChar = code[buffer];
+                        wordbuffer += theChar;
+                        Console.WriteLine(theChar);
+                        SendKeys.SendWait(theChar);
+                        form.addChar(theChar);
                     }
                     else
                     {
                         Console.WriteLine("??");
                     }
                     buffer = "";
+                }
+
+                if (msUnpressed > DOT_LENGTH_MS * 3 && wordbuffer != "")
+                {
+                    // flush the word
+                    SendKeys.SendWait(" ");
+                    form.addChar(" ");
+                    wordbuffer = "";
                 }
 
                 lastPressed = isPressed;
@@ -155,6 +186,7 @@ namespace Morsel
                     isPressed = true;
                 }
             }
+            form.pressState(isPressed);
         }
 
         private static async Task EnumerateMidiInputDevices()

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -38,6 +39,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.lastMidiID = new System.Windows.Forms.Label();
             this.outputChars = new System.Windows.Forms.Label();
+            this.pressedIndicator = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.SuspendLayout();
             // 
@@ -140,11 +142,24 @@
             this.outputChars.Size = new System.Drawing.Size(0, 21);
             this.outputChars.TabIndex = 11;
             // 
+            // pressedIndicator
+            // 
+            this.pressedIndicator.AutoSize = true;
+            this.pressedIndicator.BackColor = System.Drawing.Color.Silver;
+            this.pressedIndicator.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pressedIndicator.Location = new System.Drawing.Point(320, 186);
+            this.pressedIndicator.Name = "pressedIndicator";
+            this.pressedIndicator.Padding = new System.Windows.Forms.Padding(5);
+            this.pressedIndicator.Size = new System.Drawing.Size(94, 31);
+            this.pressedIndicator.TabIndex = 12;
+            this.pressedIndicator.Text = "Unpressed";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(498, 273);
+            this.ClientSize = new System.Drawing.Size(498, 311);
+            this.Controls.Add(this.pressedIndicator);
             this.Controls.Add(this.outputChars);
             this.Controls.Add(this.lastMidiID);
             this.Controls.Add(this.label7);
@@ -155,6 +170,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.trackBar2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Morsel";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -176,6 +192,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lastMidiID;
         private System.Windows.Forms.Label outputChars;
+        private System.Windows.Forms.Label pressedIndicator;
     }
 }
 
